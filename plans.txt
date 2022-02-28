@@ -1,0 +1,9 @@
+# Website for evaluating Spotify's Discover Weekly playlist.
+
+* You'll need to log in.
+* Upon log in, it loads your current Discover Weekly Playlist.
+* It creates a playlist folder to contain the To-Explore playlists.
+* It will need to involve the Spotify Player, which would be good for me to create a basic template for, as it will be reused a lot.
+* You can play through your Discover Weekly. If you Like a song, it will add it to this week's To-Explore playlist, as well as add it to your Liked Songs.
+* To-Explore playlists will be saved per week, all in the same folder. They will also be amalgamated into one large To-Explore playlist, saved in the same folder.
+* When viewing any of the To-Explore playlists (which is all you will be able to do on this specific website, aside from playing your Discover Weekly), it will show you how many songs you have liked by the same artist for each song, to help indicate if the song is from an artist that you didn't realise you liked.
