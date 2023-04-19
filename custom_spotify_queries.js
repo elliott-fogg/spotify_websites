@@ -7,32 +7,45 @@ async function getUserPlaylists() {
 	return await spotifyQueryAll("me/playlists", args)
 }
 
+
 function fetchUserPlaylists() {
-	let ulist = document.getElementById("playlist_list");
+	let ulist = document.getElementById("playlist_display");
 	ulist.innerHTML == "";
 	let spinner = document.createElement("div");
 	spinner.classList.add("loader");
 	ulist.appendChild(spinner);
 
-	loadUserPlaylist();
+	loadUserPlaylists();
 }
 
 
 async function loadUserPlaylists() {
-	let ulist = document.getElementById("playlist_list");
 	getUserPlaylists()
-	.then(plist => {
-		console.log(plist);
-		ulist.innerHTML = "";
-		for (let i = 0; i < plist.length; i++) {
-			let li = document.createElement("li");
+	.then(plist => sortAndLoadPlaylists(plist));
+}
 
-			let li_name = plist[i]["name"];
-			let li_len = plist[i]["tracks"]["total"];
-			let li_id = plist[i]["id"];
 
-			li.textContent = `${li_name} (${li_len}) - ${li_id}`;
-			ulist.appendChild(li);
-		}
-	})
+function sortAndLoadPlaylists(playlist_list) {
+	let d = document.getElementById("playlist_display");
+	let user_playlists = [];
+	let other_playlists = [];
+
+	for (let i = 0; i < playlist_list.length; i++) {
+		let plist = playlist_list[i];
+		let name = plist["name"];
+		let track_num = plist["tracks"]["total"];
+		let plist_id = plist["id"];
+		let author = plist["owner"]["display_name"];
+
+		let li = document.createElement("li");
+		li.textContent = `${name} >> ${author} (${track_num})`;
+		user_playlists.appendChild(li);
+	}
+
+	d.innerHTML = "";
+	let user_ul = document.createElement("ul");
+	for (let i = 0; i < user_playlists.length; i++) {
+		user_ul.appendChild(user_playlists[i]);
+	}
+	d.appendChild(user_ul);
 }
