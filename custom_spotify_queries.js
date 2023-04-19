@@ -39,7 +39,7 @@ function sortAndLoadPlaylists(playlist_list) {
 
 		let li = document.createElement("li");
 		li.textContent = `${name} >> ${author} (${track_num})`;
-		user_playlists.appendChild(li);
+		user_playlists.push(li);
 	}
 
 	d.innerHTML = "";
