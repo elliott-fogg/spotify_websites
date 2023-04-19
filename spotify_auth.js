@@ -58,9 +58,9 @@ function getSpotifyAuthorization() {
 
 function checkSpotifyAccess() {
 	let access_token = localStorage.getItem('access_token');
-	let access_token_timestamp = localStorage.get("access_token_timestamp");
-	let access_token_duration = localStorage.get("access_token_duration");
-	let date = new Date;
+	let access_token_timestamp = localStorage.getItem("access_token_timestamp");
+	let access_token_duration = localStorage.getItem("access_token_duration");
+	let date = new Date();
 
 	if ((access_token == null) ||
 		((access_token_timestamp + access_token_duration) > date.getTime())) {
@@ -126,7 +126,7 @@ async function requestSpotifyAccessCode(body) {
 		return response.json();
 	})
 	.then(data => {
-		let date = new Date;
+		let date = new Date();
 		localStorage.setItem('access_token', data.access_token);
 		localStorage.setItem('access_token_timestamp', date.getTime());
 		localStorage.setItem('access_token_duration', data.expires_in);
