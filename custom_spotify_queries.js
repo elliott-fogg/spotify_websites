@@ -14,10 +14,9 @@ function fetchUserPlaylists() {
 	spinner.classList.add("loader");
 
 	getUserPlaylists()
-	.then(data => {
+	.then(plist => {
 		console.log(data);
 		ulist.innerHTML = "";
-		plist = data["items"];
 		for (let i = 0; i < plist.length; i++) {
 			let li = document.createElement("li");
 
