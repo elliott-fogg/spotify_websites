@@ -51,7 +51,7 @@ function getSpotifyAuthorization() {
 		let url = "https://accounts.spotify.com/authorize?" + args;
 		console.log(url);
 
-		window.open(url);
+		window.location.replace(url);
 	})
 }
 
