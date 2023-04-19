@@ -80,7 +80,7 @@ function checkSpotifyAccess() {
 
 
 async function requestSpotifyAccessCode(body) {
-	const response = await fetch("https://accounts.spotify.com/api/token", {
+	fetch("https://accounts.spotify.com/api/token", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded"
@@ -95,6 +95,7 @@ async function requestSpotifyAccessCode(body) {
 	})
 	.then(data => {
 		localStorage.setItem('access_token', data.access_token);
+		localStorage.setItem('test', JSON.stringify(data));
 	})
 	.catch(error => {
 		console.error("Error:", error);
