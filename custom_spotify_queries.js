@@ -4,8 +4,7 @@ async function getUserPlaylists() {
 		limit: 50
 	});
 
-	spotifyQuery("me/playlists", args)
-	.then()
+	return await spotifyQuery("me/playlists", args)
 }
 
 function fetchUserPlaylists() {
