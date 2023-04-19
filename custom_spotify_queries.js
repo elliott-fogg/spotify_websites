@@ -15,7 +15,7 @@ function fetchUserPlaylists() {
 
 	getUserPlaylists()
 	.then(plist => {
-		console.log(data);
+		console.log(plist);
 		ulist.innerHTML = "";
 		for (let i = 0; i < plist.length; i++) {
 			let li = document.createElement("li");
