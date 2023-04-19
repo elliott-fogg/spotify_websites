@@ -57,25 +57,57 @@ function getSpotifyAuthorization() {
 
 
 function checkSpotifyAccess() {
-	const urlParams = new URLSearchParams(window.location.search);
-	let code = urlParams.get("code");
+	let access_token = localStorage.getItem('access_token');
+	let access_token_timestamp = localStorage.get("access_token_timestamp");
+	let access_token_duration = localStorage.get("access_token_duration");
+	let date = new Date;
 
-	if (code == null) {
-		return false
+	if ((access_token == null) ||
+		((access_token_timestamp + access_token_duration) > date.getTime())) {
+		
+		const urlParams = new URLSearchParams(window.location.search);
+		let code = urlParams.get("code");
+
+		if (code == null) {
+			return false;
+		} else {
+			// Access Code is in the URL, save and remove it
+			let codeVerifier = localStorage.getItem("code_verifier");
+
+			let body = new URLSearchParams({
+				grant_type: "authorization_code",
+				code: code,
+				redirect_uri: redirectUri,
+				client_id: clientId,
+				code_verified: codeVerifier
+			});
+
+			requestSpotifyAccessCode(body);
+			return true;
+		}
 	} else {
-		let codeVerifier = localStorage.getItem("code_verifier");
-
-		let body = new URLSearchParams({
-			grant_type: "authorization_code",
-			code: code,
-			redirect_uri: redirectUri,
-			client_id: clientId,
-			code_verifier: codeVerifier
-		});
-
-		requestSpotifyAccessCode(body);
-		return true
+		return true;
 	}
+
+	// const urlParams = new URLSearchParams(window.location.search);
+	// let code = urlParams.get("code");
+
+	// if (code == null) {
+	// 	return false
+	// } else {
+	// 	let codeVerifier = localStorage.getItem("code_verifier");
+
+	// 	let body = new URLSearchParams({
+	// 		grant_type: "authorization_code",
+	// 		code: code,
+	// 		redirect_uri: redirectUri,
+	// 		client_id: clientId,
+	// 		code_verifier: codeVerifier
+	// 	});
+
+	// 	requestSpotifyAccessCode(body);
+	// 	return true
+	// }
 }
 
 
@@ -94,7 +126,10 @@ async function requestSpotifyAccessCode(body) {
 		return response.json();
 	})
 	.then(data => {
+		let date = new Date;
 		localStorage.setItem('access_token', data.access_token);
+		localStorage.setItem('access_token_timestamp', date.getTime());
+		localStorage.setItem('access_token_duration', data.expires_in);
 		localStorage.setItem('test', JSON.stringify(data));
 	})
 	.catch(error => {
