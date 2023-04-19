@@ -25,7 +25,7 @@ async function generateCodeChallenge(codeVerifier) {
 
 
 const clientId = '0f101924c51c434f831b7864e1b54484';
-const redirectUri = "https://elliott-fogg.github.io/spotify_websites/dashboard_callback.html";
+const redirectUri = "https://elliott-fogg.github.io/spotify_websites/playlist_dashboard.html";
 
 
 function getSpotifyAuthorization() {
