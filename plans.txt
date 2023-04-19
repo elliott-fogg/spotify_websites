@@ -12,3 +12,7 @@
 
 * Based on the premise we did once at the firepit where we each get to ask a question (e.g. what is your happiest song?), and each person adds in their answer. The answers are all added to a final playlist.
 * Adds feature to show what the question was (optional?) and whose answer it is (option.)
+
+# Playlist Dashboard
+* Add a page that will display all of your playlists
+* When you click on one, it will load all the songs and create a plot of the audio features
