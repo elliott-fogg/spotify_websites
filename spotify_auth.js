@@ -7,6 +7,7 @@ function generateRandomString(length) {
 	return text;
 }
 
+
 async function generateCodeChallenge(codeVerifier) {
 	function base64encode(string) {
 		return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
@@ -22,8 +23,10 @@ async function generateCodeChallenge(codeVerifier) {
 	return base64encode(digest);
 }
 
+
 const clientId = '0f101924c51c434f831b7864e1b54484';
 const redirectUri = "https://elliott-fogg.github.io/spotify_websites/dashboard_callback.html";
+
 
 function getSpotifyAuthorization() {
 	console.log("Working?")
@@ -33,7 +36,7 @@ function getSpotifyAuthorization() {
 	generateCodeChallenge(codeVerifier)
 	.then(codeChallenge => {
 		let state = generateRandomString(16);
-		let scope = 'user-read-private user-read-email';
+		let scope = 'user-read-private user-read-email playlist-read-private';
 
 		localStorage.setItem('code_verifier', codeVerifier);
 
@@ -54,7 +57,8 @@ function getSpotifyAuthorization() {
 	})
 }
 
-async function SpotifyTestQuery() {
+
+async function spotifyGetAccessCode() {
 	const urlParams = new URLSearchParams(window.location.search);
 	let code = urlParams.get("code");
 
@@ -89,6 +93,7 @@ async function SpotifyTestQuery() {
 	});
 }
 
+
 async function getProfile() {
 	let accessToken = localStorage.getItem('access_token');
 
@@ -103,7 +108,24 @@ async function getProfile() {
 	console.log(data);
 }
 
+
+async function spotifyQuery(queryString, args=null) {
+	let accessToken = localStorage.getItem('access_token');
+	console.log(args);
+
+	const response = await.fetch('https://api.spotify.com/v1/${queryString}', {
+		headers: {
+			Authorization: 'Bearer ' + accessToken
+		}
+	});
+
+	const data = await response.json();
+	return data;
+}
+
+
 async function testQueryButton() {
-	await SpotifyTestQuery();
-	await getProfile();
+	await spotifyGetAccessCode();
+	let userData = await spotifyQuery("me");
+	console.log(userData);
 }
