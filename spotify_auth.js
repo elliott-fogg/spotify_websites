@@ -133,6 +133,7 @@ async function spotifyQueryAll(queryString, args=null) {
 	};
 
 	while (url != null) {
+		console.log(url);
 		const reponse = await fetch(url, {
 			headers: {
 				Authorization: 'Bearer ' + accessToken
