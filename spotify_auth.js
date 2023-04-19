@@ -156,12 +156,13 @@ async function spotifyGetAccessCode() {
 
 async function spotifyQuery(queryString, args=null) {
 	let accessToken = localStorage.getItem('access_token');
-	console.log(args);
+	console.log(String(args));
 
-	const response = await fetch('https://api.spotify.com/v1/${queryString}', {
+	const response = await fetch(`https://api.spotify.com/v1/${queryString}`, {
 		headers: {
 			Authorization: 'Bearer ' + accessToken
-		}
+		},
+		body: args
 	});
 
 	const data = await response.json();
