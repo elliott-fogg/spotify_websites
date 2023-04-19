@@ -12,7 +12,14 @@ function fetchUserPlaylists() {
 	ulist.innerHTML == "";
 	let spinner = document.createElement("div");
 	spinner.classList.add("loader");
+	ulist.appendChild(spinner);
 
+	loadUserPlaylist();
+}
+
+
+async function loadUserPlaylists() {
+	let ulist = document.getElementById("playlist_list");
 	getUserPlaylists()
 	.then(plist => {
 		console.log(plist);
