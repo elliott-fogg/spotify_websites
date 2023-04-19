@@ -101,58 +101,6 @@ async function requestSpotifyAccessCode(body) {
 	});
 }
 
-/*
-async function spotifyGetAccessCode() {
-	const urlParams = new URLSearchParams(window.location.search);
-	let code = urlParams.get("code");
-
-	let codeVerifier = localStorage.getItem('code_verifier');
-
-	let body = new URLSearchParams({
-		grant_type: "authorization_code",
-		code: code,
-		redirect_uri: redirectUri,
-		client_id: clientId,
-		code_verifier: codeVerifier
-	});
-
-	const response = fetch("https://accounts.spotify.com/api/token", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		},
-		body: body
-	})
-	.then(response => {
-		if (!response.ok) {
-			throw new Error('HTTP status ' + response.status);
-		}
-		return response.json();
-	})
-	.then(data => {
-		localStorage.setItem('access_token', data.access_token);
-	})
-	.catch(error => {
-		console.error("Error:", error);
-	});
-}
-*/
-
-
-// async function getProfile() {
-// 	let accessToken = localStorage.getItem('access_token');
-
-// 	const response = await fetch('https://api.spotify.com/v1/me', {
-// 		headers: {
-// 			Authorization: 'Bearer ' + accessToken
-// 		}
-// 	});
-
-// 	const data = await response.json();
-
-// 	console.log(data);
-// }
-
 
 async function spotifyQuery(queryString, args=null) {
 	let accessToken = localStorage.getItem('access_token');
@@ -171,6 +119,32 @@ async function spotifyQuery(queryString, args=null) {
 
 	const data = await response.json();
 	return data;
+}
+
+async function spotifyQueryAll(queryString, args=null) {
+	var output_items = [];
+
+	let accessToken = localStorage.getItem('access_token');
+	console.log(String(args));
+
+	let url = `https://api.spotify.com/v1/${queryString}`;
+	if (args != null) {
+		url += `?${args}`;
+	};
+
+	while (url != null) {
+		const reponse = await fetch(url, {
+			headers: {
+				Authorization: 'Bearer ' + accessToken
+			}
+		});
+
+		const data = await response.json();
+		output_items = output_items.concat(data["items"]);
+		url = data["next"];
+	}
+
+	return output_items;
 }
 
 
