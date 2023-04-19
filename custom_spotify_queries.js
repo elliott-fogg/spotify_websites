@@ -4,5 +4,19 @@ async function getUserPlaylists() {
 		limit: 50
 	});
 
-	let playlistData = await spotifyQuery("me/playlists", args);
+	spotifyQuery("me/playlists", args)
+	.then()
+}
+
+function fetchUserPlaylists() {
+	let ulist = document.getElementById("playlist_list");
+	ulist.innerHTML == "";
+	let spinner = document.createElement("div");
+	spinner.classList.add("loader");
+
+	getUserPlaylists()
+	.then(data => {
+		console.log(data);
+		ulist.innerHTML = "Complete!";
+	})
 }

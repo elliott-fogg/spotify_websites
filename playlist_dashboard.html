@@ -1,11 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Spotify Auth Test</title>
+	<title>Spotify Playlist Dashboard</title>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"
+    	integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    	crossorigin=""></script>
 	<script type="text/javascript" src="spotify_auth.js"></script>
-	<script>console.log("Hello");</script>
+	<script type="text/javascript" src="custom_spotify_queries.js"></script>
+	<link rel="stylesheet" href="playlist_dashboard.css">
 </head>
 <body>
-	<button onclick=getSpotifyAuthorization()>Log In</button>
+	<div id="login_div">#login_div_test</div>
+	<button onclick=fetchUserPlaylists() disabled=true>Load Playlists</button>
+	<ul id="playlist_list"></ul>
+	
+
+
+
+	<script>
+		var d = document.getElementById("login_div");
+
+		if (!checkSpotifyAccess()) {
+			console.log("Not logged in");
+			d.innerHTML = "";
+			let btn = document.createElement("button");
+			btn.textContent = "Log In";
+			btn.onclick = getSpotifyAuthorization;
+			d.appendChild(btn);
+		
+		} else {
+			console.log("Logged in!");
+			d.innerHTML = "";
+			let btn = document.createElement("button");
+			btn.textContent = "Logged In!";
+			d.appendChild(btn);
+
+			document.getElementById("fetchPlaylistBtn").disabled = false;
+		}
+
+
+
+
+
+
+	</script>
 </body>
 </html>

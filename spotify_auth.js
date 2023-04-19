@@ -29,8 +29,6 @@ const redirectUri = "https://elliott-fogg.github.io/spotify_websites/dashboard_c
 
 
 function getSpotifyAuthorization() {
-	console.log("Working?")
-
 	let codeVerifier = generateRandomString(128);
 
 	generateCodeChallenge(codeVerifier)
@@ -58,6 +56,52 @@ function getSpotifyAuthorization() {
 }
 
 
+function checkSpotifyAccess() {
+	const urlParams = new URLSearchParams(window.location.search);
+	let code = urlParams.get("code");
+
+	if (code == null) {
+		return false
+	} else {
+		let codeVerifier = localStorage.getItem("code_verifier");
+
+		let body = new URLSearchParams({
+			grant_type: "authorization_code",
+			code: code,
+			redirect_uri: redirectUri,
+			client_id: clientId,
+			code_verifier: codeVerifier
+		});
+
+		requestSpotifyAccessCode(body);
+		return true
+	}
+}
+
+
+async function requestSpotifyAccessCode(body) {
+	const response = await fetch("https://accounts.spotify.com/api/token", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		body: body
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('HTTP status ' + response.status);
+		}
+		return response.json();
+	})
+	.then(data => {
+		localStorage.setItem('access_token', data.access_token);
+	})
+	.catch(error => {
+		console.error("Error:", error);
+	});
+}
+
+/*
 async function spotifyGetAccessCode() {
 	const urlParams = new URLSearchParams(window.location.search);
 	let code = urlParams.get("code");
@@ -92,28 +136,29 @@ async function spotifyGetAccessCode() {
 		console.error("Error:", error);
 	});
 }
+*/
 
 
-async function getProfile() {
-	let accessToken = localStorage.getItem('access_token');
+// async function getProfile() {
+// 	let accessToken = localStorage.getItem('access_token');
 
-	const response = await fetch('https://api.spotify.com/v1/me', {
-		headers: {
-			Authorization: 'Bearer ' + accessToken
-		}
-	});
+// 	const response = await fetch('https://api.spotify.com/v1/me', {
+// 		headers: {
+// 			Authorization: 'Bearer ' + accessToken
+// 		}
+// 	});
 
-	const data = await response.json();
+// 	const data = await response.json();
 
-	console.log(data);
-}
+// 	console.log(data);
+// }
 
 
 async function spotifyQuery(queryString, args=null) {
 	let accessToken = localStorage.getItem('access_token');
 	console.log(args);
 
-	const response = await.fetch('https://api.spotify.com/v1/${queryString}', {
+	const response = await fetch('https://api.spotify.com/v1/${queryString}', {
 		headers: {
 			Authorization: 'Bearer ' + accessToken
 		}
