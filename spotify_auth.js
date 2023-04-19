@@ -121,6 +121,7 @@ async function spotifyQuery(queryString, args=null) {
 	return data;
 }
 
+
 async function spotifyQueryAll(queryString, args=null) {
 	var output_items = [];
 
@@ -134,7 +135,7 @@ async function spotifyQueryAll(queryString, args=null) {
 
 	while (url != null) {
 		console.log(url);
-		const reponse = await fetch(url, {
+		const response = await fetch(url, {
 			headers: {
 				Authorization: 'Bearer ' + accessToken
 			}
