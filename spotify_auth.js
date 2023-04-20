@@ -57,61 +57,61 @@ function getSpotifyAuthorization() {
 
 
 function checkSpotifyAccess() {
+	// Get login button for later use
+	var login_button = document.getElementById("login_btn");
+
+	// Check for locally stored access code (that hasn't expired)
 	let access_token = localStorage.getItem('access_token');
 	let access_token_timestamp = localStorage.getItem("access_token_timestamp");
 	let access_token_duration = localStorage.getItem("access_token_duration");
 	let date = new Date();
 
-	if ((access_token == null) ||
-		((access_token_timestamp + access_token_duration) > date.getTime())) {
-		
-		const urlParams = new URLSearchParams(window.location.search);
-		let code = urlParams.get("code");
-
-		if (code == null) {
-			return false;
-		} else {
-			// Access Code is in the URL, save and remove it
-			let codeVerifier = localStorage.getItem("code_verifier");
-
-			let body = new URLSearchParams({
-				grant_type: "authorization_code",
-				code: code,
-				redirect_uri: redirectUri,
-				client_id: clientId,
-				code_verified: codeVerifier
-			});
-
-			requestSpotifyAccessCode(body);
-			return true;
+	if (access_token != null) {
+		if (access_token_timestamp + access_token_duration > date.getTime()) {
+			updateLoginButton();
+			return;
 		}
-	} else {
-		return true;
 	}
 
-	// const urlParams = new URLSearchParams(window.location.search);
-	// let code = urlParams.get("code");
+	// Check for response code in the page url (we've just been redirected)
+	const urlParams = new URLSearchParams(window.location.search);
+	let code = urlParams.get("code");
 
-	// if (code == null) {
-	// 	return false
-	// } else {
-	// 	let codeVerifier = localStorage.getItem("code_verifier");
+	if (code != null) {
+		// Response code exists, request access code, then remove
+		login_button.disabled = true;
+		window.history.replaceState({}, "", "/");
+		requestSpotifyAccessCode(code);
+		return;
+	}
 
-	// 	let body = new URLSearchParams({
-	// 		grant_type: "authorization_code",
-	// 		code: code,
-	// 		redirect_uri: redirectUri,
-	// 		client_id: clientId,
-	// 		code_verifier: codeVerifier
-	// 	});
+	// At this point, the user is not logged in
+	login_button.onclick = getSpotifyAuthorization;
+	login_button.disabled = false;
 
-	// 	requestSpotifyAccessCode(body);
-	// 	return true
-	// }
+	// Check for existing access code (not out of date)
+		// If yes, load username and logout button
+
+		// If no, create login button
+		// Check for code in URL
+			// If yes, disable login button
+			// Request access code
+			// Remove URL
+			// On reception of access code, replace login button with username and logout button
 }
 
 
-async function requestSpotifyAccessCode(body) {
+async function requestSpotifyAccessCode(response_code) {
+	let codeVerifier = localStorage.getItem("code_verifier");
+
+	let body = new URLSearchParams({
+		grant_type: "authorization_code",
+		code: response_code,
+		redirect_uri: redirectUri,
+		client_id: clientId,
+		code_verified: codeVerifier
+	});
+
 	fetch("https://accounts.spotify.com/api/token", {
 		method: "POST",
 		headers: {
@@ -131,10 +131,29 @@ async function requestSpotifyAccessCode(body) {
 		localStorage.setItem('access_token_timestamp', date.getTime());
 		localStorage.setItem('access_token_duration', data.expires_in);
 		localStorage.setItem('test', JSON.stringify(data));
+		updateLoginButton();
 	})
 	.catch(error => {
 		console.error("Error:", error);
 	});
+}
+
+
+async function updateLoginButton() {
+	let userData = await spotifyQuery("me");
+	localStorage.setItem("test", JSON.stringify(userData));
+
+	let login_div = document.getElementById("login_div");
+	login_div.innerHTML = "";
+
+	let username = document.createElement("label");
+	username.textContent = "WIP";
+	login_div.appendChild(username);
+
+	let logout_btn = document.createElement("button");
+	logout_btn.textContent = "Log Out";
+	logout_btn.onclick = () => {console.log("Log out")};
+	login_div.appendChild(logout_btn);
 }
 
 
