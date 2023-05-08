@@ -84,7 +84,7 @@ function checkSpotifyAccess() {
 		// Response code exists, request access code, then remove
 		login_button.disabled = true;
 		requestSpotifyAccessCode(code);
-		// window.history.replaceState({}, "", redirectUri);
+		window.history.replaceState({}, "", redirectUri);
 		return;
 	}
 

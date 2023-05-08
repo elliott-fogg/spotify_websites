@@ -1,13 +1,3 @@
-async function getUserPlaylists() {
-	let args = new URLSearchParams({
-		offset: 0,
-		limit: 50
-	});
-
-	return await spotifyQueryAll("me/playlists", args)
-}
-
-
 function fetchUserPlaylists() {
 	let ulist = document.getElementById("playlist_display");
 	ulist.innerHTML == "";
@@ -25,7 +15,18 @@ async function loadUserPlaylists() {
 }
 
 
+async function getUserPlaylists() {
+	let args = new URLSearchParams({
+		offset: 0,
+		limit: 50
+	});
+
+	return await spotifyQueryAll("me/playlists", args)
+}
+
+
 function sortAndLoadPlaylists(playlist_list) {
+	console.log(playlist_list);
 	let d = document.getElementById("playlist_display");
 	let user_playlists = [];
 	let other_playlists = [];
