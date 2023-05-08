@@ -112,7 +112,7 @@ async function requestSpotifyAccessCode(response_code) {
 		code: response_code,
 		redirect_uri: redirectUri,
 		client_id: clientId,
-		code_verified: codeVerifier
+		code_verifier: codeVerifier
 	});
 
 	fetch("https://accounts.spotify.com/api/token", {
