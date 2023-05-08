@@ -157,6 +157,8 @@ async function updateLoginButton() {
 	logout_btn.textContent = "Log Out";
 	logout_btn.onclick = () => {console.log("Log out")};
 	login_div.appendChild(logout_btn);
+
+	document.getElementById("fetchPlaylistBtn").disabled = false;
 }
 
 
