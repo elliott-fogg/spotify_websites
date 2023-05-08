@@ -51,7 +51,7 @@ function getSpotifyAuthorization() {
 		let url = "https://accounts.spotify.com/authorize?" + args;
 		console.log(url);
 
-		// window.location.replace(url);
+		window.location.replace(url);
 	})
 }
 
@@ -77,7 +77,10 @@ function checkSpotifyAccess() {
 	const urlParams = new URLSearchParams(window.location.search);
 	let code = urlParams.get("code");
 
+	console.log(code);
+
 	if (code != null) {
+		console.log("CODE IS NOT NULL");
 		// Response code exists, request access code, then remove
 		login_button.disabled = true;
 		requestSpotifyAccessCode(code);
