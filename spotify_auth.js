@@ -183,7 +183,7 @@ async function queryAll(queryURL) {
 	console.log(`Initiating next query - ${nextURL}`);
 
 	while (nextURL != null) {
-		let data = await query(queryURL);
+		let data = await query(nextURL);
 		output_items = output_items.concat(data["items"]);
 		nextURL = data["next"];
 	}
