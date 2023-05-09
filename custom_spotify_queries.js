@@ -49,4 +49,15 @@ function sortAndLoadPlaylists(playlist_list) {
 		user_ul.appendChild(user_playlists[i]);
 	}
 	d.appendChild(user_ul);
+
+	/*
+	TODO:
+	- Give option to sort playlists Alphabetically, by Creator,
+		by Number of Songs, or by Date Added (is this last one possible?)
+	- Maybe group playlists by the Creator (when sorted for)
+	- Give option to click on a playlist, and initiate a query for song details
+	
+
+
+	*/
 }
