@@ -62,12 +62,12 @@ function checkSpotifyAccess() {
 
 	// Check for locally stored access code (that hasn't expired)
 	let access_token = localStorage.getItem('access_token');
-	let access_token_timestamp = localStorage.getItem("access_token_timestamp");
-	let access_token_duration = localStorage.getItem("access_token_duration");
+	let access_token_timestamp = parseInt(localStorage.getItem("access_token_timestamp"));
+	let access_token_duration = parseInt(localStorage.getItem("access_token_duration"));
 	let date = new Date();
 
 	if (access_token != null) {
-		if (access_token_timestamp + access_token_duration > date.getTime()) {
+		if ((access_token_timestamp + access_token_duration) > date.getTime()) {
 			updateLoginButton();
 			return;
 		}
@@ -162,16 +162,9 @@ async function updateLoginButton() {
 }
 
 
-async function spotifyQuery(queryString, args=null) {
-	let accessToken = localStorage.getItem('access_token');
-	console.log(String(args));
-
-	let url = `https://api.spotify.com/v1/${queryString}`;
-	if (args != null) {
-		url += `?${args}`;
-	};
-
-	const response = await fetch(url, {
+async function query(queryURL) {
+	let accessToken = localStorage.getItem("access_token");
+	const response = await fetch(queryURL, {
 		headers: {
 			Authorization: 'Bearer ' + accessToken
 		}
@@ -182,31 +175,33 @@ async function spotifyQuery(queryString, args=null) {
 }
 
 
-async function spotifyQueryAll(queryString, args=null) {
-	var output_items = [];
+async function queryAll(queryURL) {
+	let nextURL = queryURL;
+	let output_items = [];
+	while (queryURL != null) {
+		let data = await query(queryURL);
+		output_items = output_items.concat(data["items"]);
+		nextURL = data["next"];
+	}
+	return output_items;
+}
 
-	let accessToken = localStorage.getItem('access_token');
-	console.log(String(args));
 
+async function spotifyQuery(queryString, args=null, all=true) {
 	let url = `https://api.spotify.com/v1/${queryString}`;
 	if (args != null) {
 		url += `?${args}`;
-	};
-
-	while (url != null) {
-		console.log(url);
-		const response = await fetch(url, {
-			headers: {
-				Authorization: 'Bearer ' + accessToken
-			}
-		});
-
-		const data = await response.json();
-		output_items = output_items.concat(data["items"]);
-		url = data["next"];
 	}
 
-	return output_items;
+	let queryFunc;
+	if (all) {
+		queryFunc = queryAll;
+	} else {
+		queryFunc = query;
+	}
+
+	let data = await queryFunc(url);
+	return data;
 }
 
 
