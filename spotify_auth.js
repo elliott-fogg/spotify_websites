@@ -191,20 +191,24 @@ async function queryAll(queryURL) {
 }
 
 
-async function spotifyQuery(queryString, args=null, all=true) {
+async function spotifyQuery(queryString, args=null) {
 	let url = `https://api.spotify.com/v1/${queryString}`;
 	if (args != null) {
 		url += `?${args}`;
 	}
 
-	let queryFunc;
-	if (all) {
-		queryFunc = queryAll;
-	} else {
-		queryFunc = query;
+	let data = await query(url);
+	return data;
+}
+
+
+async function spotifyQueryAll(queryString, args=null) {
+	let url = `https://api.spotify.com/v1/${queryString}`;
+	if (args != null) {
+		url += `?${args}`;
 	}
 
-	let data = await queryFunc(url);
+	let data = await queryAll(url);
 	return data;
 }
 
