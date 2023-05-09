@@ -40,6 +40,10 @@ function sortAndLoadPlaylists(playlist_list) {
 
 		let li = document.createElement("li");
 		li.textContent = `${name} >> ${author} (${track_num})`;
+
+		let liFunc = logPlaylistTracks.bind(plist["tracks"]["href"]);
+		li.onclick = liFunc;
+
 		user_playlists.push(li);
 	}
 
@@ -60,4 +64,9 @@ function sortAndLoadPlaylists(playlist_list) {
 
 
 	*/
+}
+
+
+function logPlaylistTracks(url) {
+	queryAll(url).then(data => {console.log(data)});
 }
