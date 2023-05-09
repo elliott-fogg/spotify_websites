@@ -151,7 +151,7 @@ async function updateLoginButton() {
 	login_div.innerHTML = "";
 
 	let username = document.createElement("label");
-	username.textContent = "WIP";
+	username.textContent = userData["display_name"];
 	login_div.appendChild(username);
 
 	let logout_btn = document.createElement("button");
