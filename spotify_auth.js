@@ -143,7 +143,7 @@ async function requestSpotifyAccessCode(response_code) {
 
 
 async function updateLoginButton() {
-	let userData = await spotifyQuery("me");
+	let userData = await spotifyQuery("me", {all: false});
 	console.log(userData);
 	localStorage.setItem("testMe", JSON.stringify(userData));
 
