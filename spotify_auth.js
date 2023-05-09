@@ -178,7 +178,7 @@ async function query(queryURL) {
 async function queryAll(queryURL) {
 	let nextURL = queryURL;
 	let output_items = [];
-	while (queryURL != null) {
+	while (nextURL != null) {
 		let data = await query(queryURL);
 		output_items = output_items.concat(data["items"]);
 		nextURL = data["next"];
