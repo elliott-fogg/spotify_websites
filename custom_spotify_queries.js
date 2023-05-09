@@ -41,7 +41,7 @@ function sortAndLoadPlaylists(playlist_list) {
 		let li = document.createElement("li");
 		li.textContent = `${name} >> ${author} (${track_num})`;
 
-		let liFunc = logPlaylistTracks.bind(plist["tracks"]["href"]);
+		let liFunc = logPlaylistTracks.bind(null, plist["tracks"]["href"]);
 		li.onclick = liFunc;
 
 		user_playlists.push(li);
